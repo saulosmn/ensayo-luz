@@ -713,8 +713,9 @@ function pintarLinea() {
     });
     acc.appendChild(bEscuchar);
 
+    const sinGrabar = PUENTE || document.body.classList.contains('movil');
     let bGrabar = null;
-    if (!PUENTE) {
+    if (!sinGrabar) {
       bGrabar = document.createElement('button');
       bGrabar.className = 'boton mini';
       bGrabar.id = 'btn-grabar';
@@ -1251,6 +1252,10 @@ window.__avisoVoz = (texto) => aviso(texto, 10000);
   } else if (window.matchMedia('(max-width: 620px)').matches) {
     /* en el navegador del teléfono también se usa la pantalla angosta */
     document.body.classList.add('movil');
+  }
+  if (document.body.classList.contains('movil')) {
+    const ajusteGrabarMovil = $('aj-grabar') && $('aj-grabar').closest('.interruptor');
+    if (ajusteGrabarMovil) ajusteGrabarMovil.hidden = true;
   }
   try {
     await cargar();
