@@ -1399,6 +1399,9 @@ window.__avisoVoz = (texto) => aviso(texto, 10000);
   if (document.body.classList.contains('movil')) {
     const ajusteGrabarMovil = $('aj-grabar') && $('aj-grabar').closest('.interruptor');
     if (ajusteGrabarMovil) ajusteGrabarMovil.hidden = true;
+    /* el acento del narrador se elige por nombre de voz de Windows; en el teléfono no aplica */
+    const campoAcento = $('sel-acento') && $('sel-acento').closest('.campo');
+    if (campoAcento) campoAcento.hidden = true;
   }
   try {
     await cargar();
