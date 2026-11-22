@@ -25,6 +25,7 @@ const S = {
     silencio: 1200,
     sensibilidad: 1,
     esperaDoble: 3500,
+    acento: 'mx',
     voces: {},
   },
   grabando: false,
@@ -97,9 +98,9 @@ const REPARTO = {
   HABITANTE: 'Jorge',
   NARRADOR: 'Catalina',
   NARRADORA: 'Catalina',
-  MARÍA: 'Dalia',
-  NOA: 'Camila',
-  ADINA: 'Valentina',
+  MARÍA: 'Camila',
+  NOA: 'Valentina',
+  ADINA: 'Karla',
   'NOA NIÑA': 'Sofía',
   'VECINA 1': 'Paola',
   'VECINA 2': 'Tania',
@@ -109,6 +110,15 @@ const REPARTO = {
   'MADRE 3': 'Yolanda',
   TODOS: 'Salomé',
   CORO: 'Ximena',
+};
+
+/* voz del narrador según el acento elegido en Ajustes */
+const ACENTOS_NARRADOR = {
+  mx: 'Dalia',
+  neutro: 'Paloma',
+  co: 'Salomé',
+  cl: 'Catalina',
+  es: 'Elvira',
 };
 
 /* con las voces neuronales basta un toque: no hay que exagerar el tono */
@@ -129,6 +139,8 @@ const NOMBRES_MUJER = ['dalia', 'camila', 'valentina', 'catalina', 'elvira', 'sa
   'isabel', 'lucia', 'lucía', 'zira', 'renata', 'elena'];
 
 const esNatural = (v) => !!v && /online \(natural\)/i.test(v.name);
+
+const sinTildes = (t) => (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 /* nombre corto para mostrar: "Jorge", "Catalina"... */
 function nombreCorto(v) {
@@ -154,6 +166,17 @@ function vozPara(q) {
   }
   const quieroMujer = esMujer(q);
   const delGenero = (lista) => lista.filter((v) => (quieroMujer ? vozMujer(v) : !vozMujer(v)));
+
+  /* el narrador (y la narradora) toma la voz del acento elegido */
+  const esNarrador = /^NARRADOR/i.test(q);
+  const acento = S.ajustes.acento;
+  if (esNarrador && acento && acento !== 'auto') {
+    const nombre = sinTildes(ACENTOS_NARRADOR[acento]);
+    if (nombre) {
+      const v = S.voces.find((x) => sinTildes(x.name).includes(nombre));
+      if (v) return v;
+    }
+  }
   const naturales = S.voces.filter(esNatural);
   const preferida = REPARTO[q];
   if (preferida) {
@@ -1102,6 +1125,7 @@ function pintarAjustes() {
   $('aj-acotaciones').checked = !!S.ajustes.acotaciones;
   $('aj-campana').checked = !!S.ajustes.campana;
   $('aj-grabar').checked = !!S.ajustes.grabar;
+  if ($('sel-acento')) $('sel-acento').value = S.ajustes.acento || 'mx';
   $('aj-escuchar').checked = !!S.ajustes.escuchar;
   $('aj-silencio').value = String(S.ajustes.silencio);
   $('aj-sensibilidad').value = String(S.ajustes.sensibilidad);
@@ -1302,6 +1326,12 @@ function conectar() {
 
   // ajustes
   $('sel-voz').addEventListener('change', (e) => { S.ajustes.voz = e.target.value; guardarAjustes(); });
+  $('sel-acento').addEventListener('change', async (e) => {
+    S.ajustes.acento = e.target.value;
+    guardarAjustes();
+    cancelar();
+    await hablarTexto('Durante generaciones, Israel esperó. Esperó mientras los imperios cambiaban de nombre, pero no de crueldad.', { q: 'NARRADOR' });
+  });
   $('aj-velocidad').addEventListener('input', (e) => {
     S.ajustes.velocidad = Number(e.target.value);
     $('aj-velocidad-val').textContent = S.ajustes.velocidad.toFixed(2).replace('.', ',') + '×';
