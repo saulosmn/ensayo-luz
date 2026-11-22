@@ -142,14 +142,24 @@ const esNatural = (v) => !!v && /online \(natural\)/i.test(v.name);
 
 const sinTildes = (t) => (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
-/* nombre corto para mostrar: "Jorge", "Catalina"... */
+const PAISES = {
+  MX: 'México', US: 'EE.UU. latino', ES: 'España', CL: 'Chile', CO: 'Colombia', PE: 'Perú',
+  AR: 'Argentina', UY: 'Uruguay', VE: 'Venezuela', PY: 'Paraguay', BO: 'Bolivia', EC: 'Ecuador',
+  GT: 'Guatemala', HN: 'Honduras', SV: 'El Salvador', NI: 'Nicaragua', CR: 'Costa Rica',
+  PA: 'Panamá', DO: 'Rep. Dominicana', CU: 'Cuba', PR: 'Puerto Rico', GQ: 'Guinea Ecuatorial',
+};
+
+/* nombre para mostrar: "Jorge (México)", "Dalia (México)", o lo que mande el teléfono */
 function nombreCorto(v) {
   if (!v) return 'sin voz';
-  return v.name
+  if (v.etiqueta) return v.etiqueta;
+  const base = v.name
     .replace(/^Microsoft\s+/i, '')
     .replace(/\s*Online \(Natural\)\s*/i, '')
     .replace(/\s*-\s*.*$/, '')
     .trim();
+  const pais = PAISES[String(v.lang || '').split('-')[1] ? String(v.lang).split('-')[1].toUpperCase() : ''];
+  return pais ? `${base} (${pais})` : base;
 }
 
 function vozMujer(v) {
@@ -198,7 +208,7 @@ function cargarVoces() {
   if (PUENTE) {
     try {
       const lista = JSON.parse(PUENTE.vocesTelefono() || '[]');
-      S.voces = lista.map((v) => ({ name: v.name, lang: v.lang, localService: !v.red, movil: true }));
+      S.voces = lista.map((v) => ({ name: v.name, lang: v.lang, localService: !v.red, movil: true, etiqueta: v.etiqueta }));
     } catch (e) {
       S.voces = [];
     }
@@ -1146,13 +1156,13 @@ function llenarSelectsPersonajes() {
     const autoNombre = nombreCorto(auto);
     const elegida = (S.ajustes.voces && S.ajustes.voces[p]) || '';
     const opciones = S.voces.map((v) => {
-      const nombre = nombreCorto(v) + (esNatural(v) ? '' : ' (local)');
+      const nombre = nombreCorto(v) + (esNatural(v) || v.etiqueta ? '' : ' · voz antigua');
       return `<option value="${escapar(v.name)}"${v.name === elegida ? ' selected' : ''}>${escapar(nombre)}</option>`;
     }).join('');
     return `<div class="fila-personaje">
       <div class="nom"><strong>${escapar(p)}</strong><span>${n} ${n === 1 ? 'línea' : 'líneas'}</span></div>
       <select data-personaje="${escapar(p)}" title="Voz de ${escapar(p)}">
-        <option value="">Automática (${escapar(autoNombre)})</option>
+        <option value="">Automática — ${escapar(autoNombre)}</option>
         ${opciones}
       </select>
       <button class="boton mini" data-probar="${escapar(p)}" title="Oír una muestra">${icono('altavoz')}</button>
