@@ -82,19 +82,19 @@ const REPARTO = {
   GABRIEL: 'Rodrigo',
   ANCIANO: 'Emilio',
   PADRE: 'Mario',
-  JOAB: 'Javier',
+  JOAB: 'Carlos',
   ELIAB: 'Alex',
   ELAZAR: 'Andrés',
   'SABIO 1': 'Federico',
-  'SABIO 2': 'Roberto',
+  'SABIO 2': 'Víctor',
   'SABIO 3': 'Sebastián',
   SOLDADO: 'Manuel',
   GUARDIAS: 'Luis',
-  MENSAJERO: 'Carlos',
+  MENSAJERO: 'Juan',
   'POSADERO 1': 'Gonzalo',
   'POSADERO 2': 'Tomás',
-  'MALQUÍAS NIÑO': 'Andrés',
-  SOMBRA: 'Álvaro',
+  'MALQUÍAS NIÑO': 'Marcelo',
+  SOMBRA: 'Roberto',
   HABITANTE: 'Jorge',
   NARRADOR: 'Catalina',
   NARRADORA: 'Catalina',
@@ -102,14 +102,14 @@ const REPARTO = {
   NOA: 'Valentina',
   ADINA: 'Karla',
   'NOA NIÑA': 'Sofía',
-  'VECINA 1': 'Paola',
+  'VECINA 1': 'Andrea',
   'VECINA 2': 'Tania',
-  POSADERA: 'Karla',
+  POSADERA: 'Karina',
   'MADRE 1': 'Margarita',
   'MADRE 2': 'Lorena',
   'MADRE 3': 'Yolanda',
   TODOS: 'Salomé',
-  CORO: 'Ximena',
+  CORO: 'Marta',
 };
 
 /* voz del narrador según el acento elegido en Ajustes */
@@ -118,7 +118,6 @@ const ACENTOS_NARRADOR = {
   neutro: 'Paloma',
   co: 'Salomé',
   cl: 'Catalina',
-  es: 'Elvira',
 };
 
 /* con las voces neuronales basta un toque: no hay que exagerar el tono */
@@ -190,8 +189,8 @@ function vozPara(q) {
   const naturales = S.voces.filter(esNatural);
   const preferida = REPARTO[q];
   if (preferida) {
-    const busqueda = preferida.toLowerCase();
-    const candidatas = (naturales.length ? naturales : S.voces).filter((v) => v.name.toLowerCase().includes(busqueda));
+    const busqueda = sinTildes(preferida);
+    const candidatas = (naturales.length ? naturales : S.voces).filter((v) => sinTildes(v.name).includes(busqueda));
     const conGenero = candidatas.filter((v) => (quieroMujer ? vozMujer(v) : !vozMujer(v)));
     if (conGenero.length) return conGenero[0];
     if (candidatas.length) return candidatas[0];
