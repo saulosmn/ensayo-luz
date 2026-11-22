@@ -550,6 +550,11 @@ function aplicarModo() {
   $('btn-empezar').innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5-11-6.5Z"/></svg>'
     + (doblar ? 'Empezar a doblar' : 'Empezar ensayo');
   $('btn-mias').textContent = doblar ? 'Solo sus escenas' : 'Solo donde hablo';
+  const resumen = $('resumen-doblar');
+  if (resumen) {
+    resumen.hidden = !doblar;
+    if (doblar) resumen.textContent = `La app va a decir las líneas de ${S.dobla} en las escenas marcadas. En las de los demás se queda callada.`;
+  }
   const ayuda = $('ayuda-principal');
   if (ayuda) {
     ayuda.textContent = doblar
@@ -584,7 +589,7 @@ function pintarEscenas() {
       <span class="tit">${escapar(tituloEscena(e))}</span>
       <span class="cuenta">${n
         ? (S.modo === 'doblar' ? n + ' de ' + escapar(S.dobla) : n + (n === 1 ? ' mía' : ' mías'))
-        : (S.modo === 'doblar' ? 'sin líneas suyas' : 'sin tus líneas')}</span>
+        : (S.modo === 'doblar' ? escapar(S.dobla) + ' no habla' : 'sin tus líneas')}</span>
       <span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5 9.5 17 19 7"/></svg></span>`;
     b.addEventListener('click', () => {
       const k = String(e.n);
