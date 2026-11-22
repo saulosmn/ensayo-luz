@@ -26,6 +26,18 @@ LA PRIMERA VEZ
   micrófono: hay que darle "Permitir" (si no, igual funciona, pero hay
   que apretar "Ya la dije" en cada línea).
 
+SI FALTA UN PERSONAJE (por ejemplo el Narrador)
+------------------------------------------------
+La app puede hacer ese papel. En la pantalla de inicio, en "¿Qué vas a
+hacer?", elegir "Doblar a un personaje que falta"; después escoger en
+"¿A quién falta?" el personaje (por ejemplo NARRADOR) y marcar las
+escenas.
+
+Ahí la app dice SOLO las líneas de ese personaje y se queda callada en
+las de los demás, para que los actores presentes las digan en vivo.
+Abajo se elige cuánto espera entre una línea y otra (2 s, 3,5 s, 6 s, o
+manual: la app espera a que aprietes "Siguiente").
+
 CÓMO SE ENSAYA
 --------------
 - La app dice en voz alta lo de los demás personajes.

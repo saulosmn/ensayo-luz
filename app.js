@@ -549,13 +549,26 @@ function aplicarModo() {
   if (campoYo) campoYo.hidden = doblar;
   $('btn-empezar').innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5-11-6.5Z"/></svg>'
     + (doblar ? 'Empezar a doblar' : 'Empezar ensayo');
+  $('btn-mias').textContent = doblar ? 'Solo sus escenas' : 'Solo donde hablo';
+  const ayuda = $('ayuda-principal');
+  if (ayuda) {
+    ayuda.textContent = doblar
+      ? 'La app hace el papel del personaje que falta: dice solo sus líneas y se queda callada en las de los demás, que las dicen los actores presentes.'
+      : 'Elige tu personaje y las escenas. La app dice las líneas de los demás en voz alta, se detiene en las tuyas y sigue sola cuando terminas de hablar.';
+  }
   localStorage.setItem('lhp_modo', S.modo);
+  if (S.data) pintarEscenas();
 }
 
 function escenasDe() { return S.data.escenas; }
 
+function personajeClave() {
+  return S.modo === 'doblar' ? S.dobla : S.yo;
+}
+
 function misLineasEn(escena) {
-  return escena.b.filter((b) => b.t === 'd' && b.q === S.yo).length;
+  const q = personajeClave();
+  return escena.b.filter((b) => b.t === 'd' && b.q === q).length;
 }
 
 function pintarEscenas() {
@@ -569,7 +582,9 @@ function pintarEscenas() {
     b.dataset.escena = String(e.n);
     b.innerHTML = `<span class="num">${num(e.n)}</span>
       <span class="tit">${escapar(tituloEscena(e))}</span>
-      <span class="cuenta">${n ? n + (n === 1 ? ' mía' : ' mías') : 'sin tus líneas'}</span>
+      <span class="cuenta">${n
+        ? (S.modo === 'doblar' ? n + ' de ' + escapar(S.dobla) : n + (n === 1 ? ' mía' : ' mías'))
+        : (S.modo === 'doblar' ? 'sin líneas suyas' : 'sin tus líneas')}</span>
       <span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5 9.5 17 19 7"/></svg></span>`;
     b.addEventListener('click', () => {
       const k = String(e.n);
@@ -1197,6 +1212,7 @@ function conectar() {
   $('sel-dobla').addEventListener('change', (e) => {
     S.dobla = e.target.value;
     localStorage.setItem('lhp_dobla', S.dobla);
+    pintarEscenas();
   });
   $('sel-espera').addEventListener('change', (e) => {
     S.ajustes.esperaDoble = Number(e.target.value);
