@@ -4,6 +4,8 @@
 const S = {
   data: null,
   yo: 'HERODES',
+  modo: 'ensayo',            // 'ensayo' = yo hablo mi parte | 'doblar' = la app hace de un personaje
+  dobla: 'NARRADOR',
   seleccion: new Set(),
   seq: [],
   idx: 0,
@@ -22,6 +24,7 @@ const S = {
     escuchar: true,
     silencio: 1200,
     sensibilidad: 1,
+    esperaDoble: 3500,
     voces: {},
   },
   grabando: false,
@@ -501,8 +504,12 @@ async function cargar() {
 
   const guardado = JSON.parse(localStorage.getItem(CLAVE_AJUSTES) || '{}');
   Object.assign(S.ajustes, guardado);
+  const modoGuardado = localStorage.getItem('lhp_modo');
+  if (modoGuardado === 'doblar' || modoGuardado === 'ensayo') S.modo = modoGuardado;
 
   llenarPersonajes();
+  llenarDobla();
+  aplicarModo();
   pintarEscenas();
   pintarAjustes();
   pintarTeleEscenas();
@@ -517,6 +524,32 @@ function llenarPersonajes() {
   $('sel-personaje').innerHTML = opciones;
   $('sel-personaje-2').innerHTML = opciones;
   $('sel-personaje-2').value = S.yo;
+}
+
+function llenarDobla() {
+  const lista = S.data.personajes
+    .map((p) => ({ p, n: S.data.escenas.reduce((a, e) => a + e.b.filter((b) => b.t === 'd' && b.q === p).length, 0) }))
+    .sort((a, b) => b.n - a.n);
+  $('sel-dobla').innerHTML = lista
+    .map(({ p, n }) => `<option value="${escapar(p)}">${escapar(p)} — ${n} ${n === 1 ? 'línea' : 'líneas'}</option>`)
+    .join('');
+  const guardado = localStorage.getItem('lhp_dobla');
+  if (guardado && S.data.personajes.includes(guardado)) S.dobla = guardado;
+  $('sel-dobla').value = S.dobla;
+  $('sel-espera').value = String(S.ajustes.esperaDoble);
+}
+
+/* pinta el modo elegido en la pantalla de preparación */
+function aplicarModo() {
+  const doblar = S.modo === 'doblar';
+  document.querySelectorAll('.modo').forEach((b) => b.classList.toggle('activo', b.dataset.modo === S.modo));
+  $('campo-dobla').hidden = !doblar;
+  $('campo-espera').hidden = !doblar;
+  const campoYo = $('sel-personaje').closest('.campo');
+  if (campoYo) campoYo.hidden = doblar;
+  $('btn-empezar').innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5-11-6.5Z"/></svg>'
+    + (doblar ? 'Empezar a doblar' : 'Empezar ensayo');
+  localStorage.setItem('lhp_modo', S.modo);
 }
 
 function escenasDe() { return S.data.escenas; }
@@ -586,7 +619,7 @@ async function empezar(escena = null, indice = 0) {
   $('preparacion').hidden = true;
   $('ensayo').hidden = false;
   pintarSelectorEscenasEnsayo();
-  if (S.ajustes.escuchar) {
+  if (S.ajustes.escuchar && S.modo === 'ensayo') {
     /* si el navegador está esperando que aceptes el micrófono, no se queda pegado: arranca igual */
     await Promise.race([prepararMicro(), esperar(7000)]);
   }
@@ -628,6 +661,7 @@ function pintarSelectorEscenasEnsayo() {
 
 async function correr(desde) {
   const miToken = ++S.token;
+  if (S.modo === 'doblar') return correrDoble(desde, miToken);
   for (let i = desde; i < S.seq.length; i++) {
     if (miToken !== S.token) return;
     while (S.pausado) {
@@ -666,6 +700,44 @@ async function correr(desde) {
   }
 }
 
+/* Modo "doblar": la app dice solo las líneas del personaje que falta y se queda
+   callada en las de los actores que sí están. */
+async function correrDoble(desde, miToken) {
+  for (let i = desde; i < S.seq.length; i++) {
+    if (miToken !== S.token) return;
+    while (S.pausado) {
+      if (miToken !== S.token) return;
+      await esperar(220);
+    }
+    S.idx = i;
+    const { b } = S.seq[i];
+    pintarLinea();
+    guardarProgreso();
+
+    if (b.t === 'd' && b.q === S.dobla) {
+      await hablarTexto(b.x, { q: b.q });
+      if (miToken !== S.token) return;
+      await esperar(700);
+      continue;
+    }
+    if (b.t === 'a') {
+      if (S.ajustes.acotaciones) {
+        await hablarTexto(b.x, { rate: 0.85, pitch: 0.95 });
+        if (miToken !== S.token) return;
+      } else {
+        await esperar(400);
+      }
+      continue;
+    }
+    if (b.t === 'c') { await esperar(900); continue; }
+
+    /* línea de un actor que está presente: silencio y tiempo para que la diga */
+    if (!S.ajustes.esperaDoble) return;   /* modo manual */
+    await esperar(S.ajustes.esperaDoble);
+  }
+  if (miToken === S.token) aviso('Se acabaron las escenas elegidas.', 6000);
+}
+
 function pintarLinea() {
   const actual = S.seq[S.idx];
   if (!actual) return;
@@ -674,7 +746,8 @@ function pintarLinea() {
   $('ens-escena').textContent = `Escena ${num(esc.n)} · ${tituloEscena(esc)}`;
   const totalEsc = S.seq.filter((x) => x.esc === esc).length;
   const posEsc = S.seq.slice(0, S.idx + 1).filter((x) => x.esc === esc).length;
-  $('ens-posicion').textContent = `bloque ${posEsc} de ${totalEsc} de la escena`;
+  $('ens-posicion').textContent = (S.modo === 'doblar' ? `doblando a ${S.dobla} · ` : '')
+    + `bloque ${posEsc} de ${totalEsc} de la escena`;
   $('progreso-relleno').style.width = ((S.idx + 1) / S.seq.length * 100).toFixed(1) + '%';
 
   const cont = $('tarjetas');
@@ -691,9 +764,11 @@ function pintarLinea() {
   }
 
   const card = document.createElement('div');
-  if (b.t === 'd' && b.q === S.yo) {
+  const esMiVoz = b.t === 'd' && b.q === (S.modo === 'doblar' ? S.dobla : S.yo);
+  if (esMiVoz) {
     card.className = 'tarjeta mia';
-    card.innerHTML = `<div class="quien"><span class="punto"></span>Tu turno · ${escapar(b.q)}</div>
+    const rotulo = S.modo === 'doblar' ? `La app dice · ${b.q}` : `Tu turno · ${b.q}`;
+    card.innerHTML = `<div class="quien"><span class="punto"></span>${escapar(rotulo)}</div>
       <div class="texto">${conFormato(b.x)}</div>
       <div class="escucha" id="escucha-ind" hidden>
         <span class="etiqueta">Te escucho…</span>
@@ -705,6 +780,7 @@ function pintarLinea() {
     const bEscuchar = document.createElement('button');
     bEscuchar.className = 'boton mini';
     bEscuchar.innerHTML = icono('altavoz') + 'Escuchar mi línea';
+    if (S.modo === 'doblar') bEscuchar.hidden = true;
     bEscuchar.addEventListener('click', async () => {
       cancelar();
       S.pausado = false;
@@ -713,7 +789,7 @@ function pintarLinea() {
     });
     acc.appendChild(bEscuchar);
 
-    const sinGrabar = PUENTE || document.body.classList.contains('movil');
+    const sinGrabar = PUENTE || S.modo === 'doblar' || document.body.classList.contains('movil');
     let bGrabar = null;
     if (!sinGrabar) {
       bGrabar = document.createElement('button');
@@ -764,8 +840,9 @@ function pintarLinea() {
     $('siguiente').innerHTML = `<span class="rotulo">Fin</span><span class="cita">Se acabaron las escenas elegidas.</span>`;
   }
 
-  const esMia = b.t === 'd' && b.q === S.yo;
-  $('btn-siguiente').innerHTML = esMia ? 'Ya la dije → <span class="tecla">espacio</span>' : 'Siguiente <span class="tecla">espacio</span>';
+  $('btn-siguiente').innerHTML = (esMiVoz && S.modo === 'ensayo')
+    ? 'Ya la dije → <span class="tecla">espacio</span>'
+    : 'Siguiente <span class="tecla">espacio</span>';
   $('btn-pausa').innerHTML = S.pausado ? icono('play') : icono('pausa');
   pintarSelectorEscenasEnsayo();
 }
@@ -1111,6 +1188,21 @@ function conectar() {
     $('sel-personaje').value = S.yo;
     marcarBotonContinuar();
   });
+  document.querySelectorAll('.modo').forEach((b) => {
+    b.addEventListener('click', () => {
+      S.modo = b.dataset.modo;
+      aplicarModo();
+    });
+  });
+  $('sel-dobla').addEventListener('change', (e) => {
+    S.dobla = e.target.value;
+    localStorage.setItem('lhp_dobla', S.dobla);
+  });
+  $('sel-espera').addEventListener('change', (e) => {
+    S.ajustes.esperaDoble = Number(e.target.value);
+    guardarAjustes();
+  });
+
   $('sel-personaje-2').addEventListener('change', (e) => {
     S.yo = e.target.value;
     localStorage.setItem(CLAVE_YO, S.yo);

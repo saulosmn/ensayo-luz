@@ -1,0 +1,22 @@
+Listo, ya está publicado y funcionando:
+
+https://saulosmn.github.io/ensayo-luz/
+
+Ábrelo en Safari (o en Chrome, si es Android). No se instala nada de la tienda.
+
+GUÍA PARA TU AMIGO (puedes reenviar este mensaje tal cual)
+
+1. Abre el link en Safari. Si se abre dentro de WhatsApp, toca los tres puntos de arriba a la derecha y elige "Abrir en Safari".
+2. Toca el botón de compartir (el cuadro con la flecha hacia arriba, abajo al centro).
+3. Elige "Añadir a pantalla de inicio" y ponle "Ensayo".
+4. Ábrelo desde el ícono que quedó en el teléfono.
+5. Arriba, en "Yo soy", elige tu personaje. Toca "Solo donde hablo" y después "Empezar ensayo".
+6. Cuando el teléfono pida el micrófono, dale "Permitir": así la app te escucha y sigue sola cuando terminas tu línea.
+
+Cómo funciona: la app dice en voz alta a los demás personajes, se detiene con una campana en tus líneas, y apenas te callas sigue con el siguiente. En pantalla aparece "Te escucho…" con una barra que se mueve con tu voz.
+
+Si avanza antes de que termines: Ajustes, "Cuánto silencio espera antes de seguir" en Largo. Si no te escucha: sensibilidad del micrófono en Alta.
+
+Para mejorar la voz del iPhone (gratis): Ajustes del iPhone, Accesibilidad, Contenido leído, Voces, Español, y descargar una "Mejorada" o "Premium".
+
+Ojo: necesita internet para abrirse, y el link no aparece en buscadores pero es público. Si algún día quieres que no esté, se borra en un minuto.

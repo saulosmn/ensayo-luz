@@ -1,0 +1,53 @@
+GUÍA RÁPIDA — ENSAYO DEL LIBRETO EN EL IPHONE
+=============================================
+
+Link:
+https://saulosmn.github.io/ensayo-luz/
+
+Se abre en Safari. No hay que instalar nada de la App Store.
+
+PASO A PASO (1 minuto)
+----------------------
+1. Abrir el link en Safari (no en WhatsApp: primero toca el link, y si se
+   abre dentro de WhatsApp, toca los tres puntos arriba a la derecha y
+   elige "Abrir en Safari").
+2. Tocar el botón de compartir (el cuadro con la flecha hacia arriba,
+   abajo al centro).
+3. Bajar y elegir "Añadir a pantalla de inicio".
+4. Ponerle un nombre, por ejemplo "Ensayo", y tocar "Añadir".
+5. Queda un ícono en la pantalla del teléfono. Se abre desde ahí.
+
+LA PRIMERA VEZ
+--------------
+- Arriba en "Yo soy" elegir el personaje que haces.
+- Tocar "Solo donde hablo" para que queden marcadas tus escenas, o
+  marcar a mano las que correspondan.
+- Tocar "Empezar ensayo". El teléfono va a pedir permiso para el
+  micrófono: hay que darle "Permitir" (si no, igual funciona, pero hay
+  que apretar "Ya la dije" en cada línea).
+
+CÓMO SE ENSAYA
+--------------
+- La app dice en voz alta lo de los demás personajes.
+- Cuando llega tu línea, suena una campana y se detiene: ahí hablas tú.
+- Cuando terminas y te callas un segundo, sigue sola con el siguiente.
+- En pantalla se ve "Te escucho…" y una barra que se mueve con tu voz,
+  para saber que te está oyendo.
+
+SI ALGO NO ANDA
+---------------
+- Si avanza antes de que termines: Ajustes → "Cuánto silencio espera
+  antes de seguir" → Largo (1,8 s).
+- Si no te escucha: Ajustes → "Sensibilidad del micrófono" → Alta.
+- Si no suena: subir el volumen multimedia del teléfono.
+- Para ver todo el texto de la escena: pestaña "Teleprónter".
+- Para estudiar tus líneas sueltas con la entrada que las anuncia:
+  pestaña "Mis líneas".
+
+SOBRE LA VOZ
+------------
+El iPhone usa sus propias voces. Se pueden bajar voces mejores (gratis)
+en: Ajustes del iPhone → Accesibilidad → Contenido leído → Voces →
+Español → elegir una "Mejorada" o "Premium" y descargarla.
+
+Necesita internet para abrirse.

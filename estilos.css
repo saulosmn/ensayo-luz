@@ -296,3 +296,19 @@ body.movil .item-linea{padding:11px 12px}
 body.movil .item-linea .mia-txt{font-size:16px}
 body.movil .tecla{display:none}
 body.movil #btn-reiniciar{display:none}
+
+/* selector de modo en la pantalla de preparación */
+.modos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modo{display:flex;flex-direction:column;gap:5px;text-align:left;background:var(--panel-2);
+  border:1px solid var(--borde);border-radius:10px;padding:12px 14px;color:var(--tenue);
+  font-family:inherit;cursor:pointer}
+.modo strong{color:var(--texto);font-size:13.5px;font-weight:600;letter-spacing:.01em}
+.modo em{font-style:normal;font-size:12px;line-height:1.45}
+.modo:hover{border-color:#3d4757}
+.modo.activo{border-color:rgba(217,167,90,.55);background:var(--oro-suave)}
+.modo.activo strong{color:var(--oro)}
+@media (max-width:620px){.modos{grid-template-columns:1fr}}
+body.movil .modos{grid-template-columns:1fr}
+
+/* que "hidden" gane sobre los display:flex de los campos */
+[hidden]{display:none !important}

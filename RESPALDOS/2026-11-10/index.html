@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0d1014">
+<link rel="manifest" href="app.webmanifest">
+<title>Libreto de ensayo — La Luz Prometida</title>
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<header class="cabecera">
+  <div class="marca">
+    <span class="marca-ojo">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/><circle cx="12" cy="12" r="4"/></svg>
+    </span>
+    <div>
+      <h1>La Luz Prometida</h1>
+      <p>Ensayo de libreto</p>
+    </div>
+  </div>
+  <nav class="pestanas" id="pestanas">
+    <button class="pestana activa" data-vista="ensayo">
+      <svg viewBox="0 0 24 24"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3V5Z"/><path d="M18 8h2v11H8"/></svg>
+      Ensayo
+    </button>
+    <button class="pestana" data-vista="teleprompter">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M7 21h10M9 17v4M15 17v4M7 9h10M7 12.5h6"/></svg>
+      Teleprónter
+    </button>
+    <button class="pestana" data-vista="mislineas">
+      <svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 9h8M8 12.5h8M8 16h5"/></svg>
+      Mis líneas
+    </button>
+    <button class="pestana" data-vista="ajustes">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2 2 2 0 1 1-4 0 1.7 1.7 0 0 0-2.9-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 3 15a2 2 0 1 1 0-4 1.7 1.7 0 0 0 1.2-2.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 10 4.1a2 2 0 1 1 4 0 1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 21 11a2 2 0 1 1 0 4Z"/></svg>
+      Ajustes
+    </button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============ ENSAYO ============ -->
+  <section class="vista activa" id="vista-ensayo">
+
+    <div class="preparacion" id="preparacion">
+      <div class="panel">
+        <h2>Preparar el ensayo</h2>
+        <p class="ayuda">Elige tu personaje y las escenas. La app dice las líneas de los demás en voz alta, se detiene en las tuyas y sigue sola cuando terminas de hablar.</p>
+
+        <label class="campo">
+          <span>Yo soy</span>
+          <select id="sel-personaje"></select>
+        </label>
+
+        <div class="campo">
+          <span>Escenas para ensayar</span>
+          <div class="lista-escenas" id="lista-escenas"></div>
+          <div class="fila-botones">
+            <button class="boton mini" id="btn-todas">Todas</button>
+            <button class="boton mini" id="btn-mias">Solo donde hablo</button>
+            <button class="boton mini" id="btn-ninguna">Ninguna</button>
+          </div>
+        </div>
+
+        <div class="fila-botones">
+          <button class="boton primario grande" id="btn-empezar">
+            <svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5-11-6.5Z"/></svg>
+            Empezar ensayo
+          </button>
+          <button class="boton" id="btn-continuar" hidden>Continuar donde quedé</button>
+        </div>
+        <p class="nota" id="nota-voces"></p>
+      </div>
+    </div>
+
+    <div class="ensayo" id="ensayo" hidden>
+      <div class="barra-ensayo">
+        <div class="barra-info">
+          <strong id="ens-escena">Escena 1</strong>
+          <span id="ens-posicion">línea 1 de 30</span>
+        </div>
+        <div class="barra-acciones">
+          <select id="ens-escena-sel" class="select-mini" title="Ir a una escena de la selección"></select>
+          <button class="boton" id="btn-reiniciar" title="Volver al inicio de esta escena (tecla Inicio)">
+            <svg viewBox="0 0 24 24"><path d="M4 11a8 8 0 1 1 2.4 5.7"/><path d="M4 4v7h7"/></svg>
+            Reiniciar escena
+          </button>
+          <button class="boton mini" id="btn-salir">Elegir escenas</button>
+        </div>
+      </div>
+      <div class="progreso"><div class="progreso-relleno" id="progreso-relleno"></div></div>
+
+      <div class="tarjetas" id="tarjetas"></div>
+
+      <div class="siguiente" id="siguiente"></div>
+
+      <div class="controles">
+        <button class="boton" id="btn-reiniciar-2" title="Volver al inicio de esta escena (tecla Inicio)">
+          <svg viewBox="0 0 24 24"><path d="M4 11a8 8 0 1 1 2.4 5.7"/><path d="M4 4v7h7"/></svg>
+          Reiniciar escena
+        </button>
+        <button class="boton icono" id="btn-anterior" title="Línea anterior (flecha izquierda)">
+          <svg viewBox="0 0 24 24"><path d="M15 5.5 8.5 12 15 18.5"/></svg>
+        </button>
+        <button class="boton icono" id="btn-repetir" title="Repetir la línea (R)">
+          <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 1 2.6 5.9"/><path d="M4 19v-5h5"/></svg>
+        </button>
+        <button class="boton icono" id="btn-pausa" title="Pausa / continuar (P)">
+          <svg viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></svg>
+        </button>
+        <button class="boton primario" id="btn-siguiente">Siguiente <span class="tecla">espacio</span></button>
+        <div class="control-velocidad">
+          <label for="rango-velocidad">Velocidad de la voz</label>
+          <input type="range" id="rango-velocidad" min="0.6" max="1.4" step="0.05" value="0.95">
+          <span id="valor-velocidad">0,95×</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TELEPRÓNTER ============ -->
+  <section class="vista" id="vista-teleprompter">
+    <div class="barra-tele">
+      <label class="campo-horizontal">
+        <span>Escena</span>
+        <select id="tele-escena"></select>
+      </label>
+      <div class="barra-acciones">
+        <button class="boton mini" id="tele-tam-menos">A−</button>
+        <button class="boton mini" id="tele-tam-mas">A+</button>
+        <button class="boton mini" id="tele-mias">Solo lo mío y las entradas</button>
+        <button class="boton mini" id="tele-inicio">Volver arriba</button>
+      </div>
+      <div class="control-velocidad">
+        <label for="tele-velocidad">Velocidad</label>
+        <input type="range" id="tele-velocidad" min="0" max="100" step="1" value="30">
+        <button class="boton icono" id="tele-play" title="Desplazar">
+          <svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5-11-6.5Z"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="tele-lienzo" id="tele-lienzo"><div class="tele-texto" id="tele-texto"></div></div>
+  </section>
+
+  <!-- ============ MIS LÍNEAS ============ -->
+  <section class="vista" id="vista-mislineas">
+    <div class="panel">
+      <div class="cabecera-panel">
+        <h2>Mis líneas</h2>
+        <span class="contador" id="contador-mias"></span>
+      </div>
+      <p class="ayuda">Cada bloque muestra lo que dicen justo antes de tu entrada y tu línea. Puedes oír la entrada y después tu línea.</p>
+      <label class="campo-horizontal">
+        <span>Personaje</span>
+        <select id="sel-personaje-2"></select>
+      </label>
+      <div id="lista-mias" class="lista-mias"></div>
+    </div>
+  </section>
+
+  <!-- ============ AJUSTES ============ -->
+  <section class="vista" id="vista-ajustes">
+    <div class="panel">
+      <h2>Ajustes de voz</h2>
+      <div class="rejilla-ajustes">
+        <h3 class="sub-ajustes">Voz</h3>
+        <label class="campo">
+          <span>Voz para leer las acotaciones</span>
+          <select id="sel-voz"></select>
+        </label>
+        <label class="campo">
+          <span>Velocidad al leer</span>
+          <input type="range" id="aj-velocidad" min="0.6" max="1.4" step="0.05" value="0.95">
+          <em id="aj-velocidad-val">0,95×</em>
+        </label>
+        <label class="campo">
+          <span>Tono (más grave o más agudo)</span>
+          <input type="range" id="aj-tono" min="0.6" max="1.4" step="0.05" value="1">
+          <em id="aj-tono-val">1,00</em>
+        </label>
+        <label class="campo">
+          <span>Espera entre una línea y otra</span>
+          <select id="aj-pausa">
+            <option value="0">Sin espera</option>
+            <option value="400">Corta (0,4 s)</option>
+            <option value="800" selected>Normal (0,8 s)</option>
+            <option value="1500">Larga (1,5 s)</option>
+          </select>
+        </label>
+        <label class="interruptor">
+          <input type="checkbox" id="aj-acotaciones">
+          <span>Leer también las acotaciones (lo que pasa en escena)</span>
+        </label>
+        <label class="interruptor">
+          <input type="checkbox" id="aj-campana" checked>
+          <span>Campana cuando es mi turno</span>
+        </label>
+        <h3 class="sub-ajustes">Micrófono</h3>
+        <label class="interruptor">
+          <input type="checkbox" id="aj-grabar">
+          <span>Grabar mi voz en cada turno para oírme después</span>
+        </label>
+        <label class="interruptor">
+          <input type="checkbox" id="aj-escuchar" checked>
+          <span>Escuchar mi turno y seguir solo cuando termino de hablar</span>
+        </label>
+        <label class="campo">
+          <span>Cuánto silencio espera antes de seguir</span>
+          <select id="aj-silencio">
+            <option value="800">Corto (0,8 s)</option>
+            <option value="1200" selected>Normal (1,2 s)</option>
+            <option value="1800">Largo (1,8 s)</option>
+          </select>
+        </label>
+        <label class="campo">
+          <span>Sensibilidad del micrófono</span>
+          <select id="aj-sensibilidad">
+            <option value="0.7">Alta (si hablo suave)</option>
+            <option value="1" selected>Normal</option>
+            <option value="1.7">Baja (si hay ruido en la pieza)</option>
+          </select>
+        </label>
+      </div>
+      <div class="fila-botones">
+        <button class="boton" id="btn-probar-voz">
+          <svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>
+          Probar la voz
+        </button>
+      </div>
+      <p class="nota" id="nota-ajustes">La voz sale del propio Windows: no gasta internet ni necesita cuentas.</p>
+    </div>
+
+    <div class="panel" style="margin-top:18px">
+      <div class="cabecera-panel">
+        <h2>Voces de cada personaje</h2>
+        <button class="boton mini" id="btn-voces-auto">Volver a automático</button>
+      </div>
+      <p class="ayuda">La app reparte sola una voz de hombre a los personajes masculinos y una de mujer a los femeninos. Si alguna no te gusta, se cambia acá.</p>
+      <div class="rejilla-personajes" id="rejilla-personajes"></div>
+    </div>
+  </section>
+
+</main>
+
+<div class="aviso" id="aviso" hidden></div>
+<audio id="reproductor" hidden></audio>
+
+<script src="libreto-datos.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

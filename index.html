@@ -59,6 +59,35 @@
         </label>
 
         <div class="campo">
+          <span>¿Qué vas a hacer?</span>
+          <div class="modos" id="modos">
+            <button type="button" class="modo activo" data-modo="ensayo">
+              <strong>Ensayar mi parte</strong>
+              <em>La app dice a los demás y se detiene en mis líneas</em>
+            </button>
+            <button type="button" class="modo" data-modo="doblar">
+              <strong>Doblar a un personaje que falta</strong>
+              <em>La app dice solo las líneas de ese personaje; el resto lo dicen los actores</em>
+            </button>
+          </div>
+        </div>
+
+        <label class="campo" id="campo-dobla" hidden>
+          <span>¿A quién falta?</span>
+          <select id="sel-dobla"></select>
+        </label>
+
+        <label class="campo" id="campo-espera" hidden>
+          <span>Espera entre las líneas de los demás</span>
+          <select id="sel-espera">
+            <option value="2000">Corta (2 s)</option>
+            <option value="3500" selected>Normal (3,5 s)</option>
+            <option value="6000">Larga (6 s)</option>
+            <option value="0">Manual: yo aprieto Siguiente</option>
+          </select>
+        </label>
+
+        <div class="campo">
           <span>Escenas para ensayar</span>
           <div class="lista-escenas" id="lista-escenas"></div>
           <div class="fila-botones">
