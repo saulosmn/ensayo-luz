@@ -143,10 +143,10 @@ const esNatural = (v) => !!v && /online \(natural\)/i.test(v.name);
 const sinTildes = (t) => (t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 const PAISES = {
-  MX: 'México', US: 'EE.UU. latino', ES: 'España', CL: 'Chile', CO: 'Colombia', PE: 'Perú',
+  MX: 'México', US: 'EE.UU.', ES: 'España', CL: 'Chile', CO: 'Colombia', PE: 'Perú',
   AR: 'Argentina', UY: 'Uruguay', VE: 'Venezuela', PY: 'Paraguay', BO: 'Bolivia', EC: 'Ecuador',
   GT: 'Guatemala', HN: 'Honduras', SV: 'El Salvador', NI: 'Nicaragua', CR: 'Costa Rica',
-  PA: 'Panamá', DO: 'Rep. Dominicana', CU: 'Cuba', PR: 'Puerto Rico', GQ: 'Guinea Ecuatorial',
+  PA: 'Panamá', DO: 'Rep. Dominicana', CU: 'Cuba', PR: 'Puerto Rico', GQ: 'Guinea Ec.',
 };
 
 /* nombre para mostrar: "Jorge (México)", "Dalia (México)", o lo que mande el teléfono */

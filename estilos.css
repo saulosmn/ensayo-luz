@@ -249,12 +249,12 @@ input[type=range]{padding:0;height:26px;accent-color:var(--oro);background:trans
 .sub-ajustes{grid-column:1/-1;margin:6px 0 2px;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--oro);font-weight:600}
 
 /* voces por personaje */
-.rejilla-personajes{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:8px 16px;margin-top:6px}
+.rejilla-personajes{display:grid;grid-template-columns:1fr;gap:7px;margin-top:6px}
 .fila-personaje{display:flex;align-items:center;gap:10px;padding:7px 10px;border:1px solid var(--borde);border-radius:9px;background:var(--panel-2)}
-.fila-personaje .nom{flex:0 0 118px;display:flex;flex-direction:column;line-height:1.25}
+.fila-personaje .nom{flex:0 0 140px;display:flex;flex-direction:column;line-height:1.25}
 .fila-personaje .nom strong{font-size:12.5px;font-weight:600}
 .fila-personaje .nom span{font-size:10.5px;color:var(--tenue)}
-.fila-personaje select{flex:1;min-width:0;font-size:12.5px;padding:6px 8px}
+.fila-personaje select{flex:1;min-width:0;font-size:13px;padding:7px 9px}
 .fila-personaje .boton.mini{padding:7px 9px}
 
 /* ===================== en el teléfono ===================== */
@@ -312,3 +312,10 @@ body.movil .modos{grid-template-columns:1fr}
 
 /* que "hidden" gane sobre los display:flex de los campos */
 [hidden]{display:none !important}
+
+/* en el teléfono, cada personaje ocupa dos líneas para que se lea la voz completa */
+body.movil .fila-personaje{flex-wrap:wrap;padding:9px 11px}
+body.movil .fila-personaje .nom{flex:1 1 auto}
+body.movil .fila-personaje select{flex:1 1 100%;width:100%}
+body.movil .fila-personaje .boton.mini{flex:0 0 auto}
+body.movil #nota-ajustes{display:none}
